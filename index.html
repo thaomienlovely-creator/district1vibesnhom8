@@ -6,14 +6,13 @@
     <title>district1.vibes | Trái tim Sài Gòn</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@300;400;600&family=Space+Mono&display=swap" rel="stylesheet">
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <style>
         :root {
             --bg: #f9f7f2;
             --text: #2d2a26;
-            --accent: #5e6d5a; /* Xanh rêu dịu */
+            --accent: #5e6d5a;
             --line: rgba(45, 42, 38, 0.15);
             --paper: #ffffff;
         }
@@ -36,9 +35,9 @@
             z-index: -1;
         }
 
-        h1, h2, h3 { font-family: 'Playfair Display', serif; font-weight: 700; }
+        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; font-weight: 700; }
 
-        /* --- MÀN HÌNH CHÀO (HERO) --- */
+        /* --- HERO SECTION --- */
         #hero {
             height: 100vh;
             display: flex;
@@ -53,19 +52,16 @@
 
         .hero-members {
             position: absolute;
-            left: 70px;
-            bottom: 60px;
+            left: 70px; bottom: 60px;
             text-align: left;
             font-family: 'Space Mono', monospace;
             font-size: 0.65rem;
             line-height: 1.8;
-            letter-spacing: 1px;
             border-left: 1px solid var(--text);
             padding-left: 15px;
             text-transform: uppercase;
             opacity: 0.8;
         }
-        .hero-members b { font-weight: 600; color: var(--accent); }
 
         .hero-tag { font-family: 'Space Mono', monospace; font-size: 0.8rem; letter-spacing: 3px; margin-bottom: 1rem; }
         .hero-title { font-size: clamp(3rem, 10vw, 6rem); margin-bottom: 2rem; line-height: 1; }
@@ -76,9 +72,7 @@
             background: transparent;
             font-family: 'Space Mono', monospace;
             cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
-            z-index: 2;
+            transition: 0.3s;
         }
         .btn-explore:hover { background: var(--text); color: var(--bg); }
 
@@ -96,81 +90,56 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
-        .column-text { text-align: justify; column-count: 1; }
-        .info-card { background: var(--paper); padding: 30px; border: 1px solid var(--line); box-shadow: 10px 10px 0px var(--accent); margin-bottom: 30px; }
-
-        /* --- ĐỊA DANH --- */
-        .place-item { margin-bottom: 100px; }
-        .place-header { font-size: 2.5rem; margin-bottom: 20px; border-left: 5px solid var(--accent); padding-left: 20px; }
+        .grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+        .info-card { background: var(--paper); padding: 25px; border: 1px solid var(--line); box-shadow: 8px 8px 0px var(--accent); height: 100%; }
         
-        .gallery { display: grid; grid-template-columns: 2fr 1fr; gap: 15px; margin: 30px 0; }
-        .gallery img { width: 100%; height: 300px; object-fit: cover; filter: sepia(20%); transition: 0.5s; cursor: crosshair; border: 1px solid var(--line); }
+        .full-width-card { background: var(--paper); padding: 30px; border: 1px solid var(--text); margin-bottom: 40px; }
+
+        /* --- GALLERY & PLACES --- */
+        .place-item { margin-bottom: 120px; }
+        .place-header { font-size: 2.5rem; margin-bottom: 25px; border-left: 6px solid var(--accent); padding-left: 20px; }
+        
+        .gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 30px 0; position: relative; }
+        .gallery-container { position: relative; }
+        .gallery img { width: 100%; height: 400px; object-fit: cover; filter: sepia(15%); transition: 0.5s; border: 1px solid var(--line); }
         .gallery img:hover { filter: sepia(0%); }
 
-        .place-info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; }
-
-        /* --- QR CODE BOX --- */
-        .qr-container { 
-            position: fixed; bottom: 30px; right: 30px; 
-            background: var(--paper); padding: 15px; 
-            border: 1px solid var(--text); text-align: center;
-            box-shadow: 5px 5px 0px var(--text);
-            z-index: 100;
-        }
-        #qrcode img { margin: 0 auto; }
-        .qr-text { font-family: 'Space Mono', monospace; font-size: 0.6rem; margin-top: 5px; }
-
-        /* --- ADMIN EDIT SYSTEM --- */
+        /* --- ADMIN STYLES --- */
         .admin-trigger {
-            position: fixed; bottom: 150px; right: 35px;
+            position: fixed; bottom: 20px; right: 20px;
             width: 40px; height: 40px; background: var(--paper);
             border: 1px solid var(--text); border-radius: 50%;
-            cursor: pointer; display: flex; align-items: center; justify-content: center;
-            box-shadow: 3px 3px 0px var(--text); z-index: 101; transition: 0.3s;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; z-index: 1000; box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
         }
-        .admin-trigger:hover { transform: scale(1.1); background: var(--accent); color: white; }
-
-        #admin-panel {
-            display: none; position: fixed; top: 50%; left: 50%; 
-            transform: translate(-50%, -50%); background: var(--paper);
-            padding: 30px; border: 2px solid var(--text); z-index: 200;
-            box-shadow: 20px 20px 0px rgba(0,0,0,0.2); width: 90%; max-width: 500px;
+        .admin-btn {
+            position: absolute; top: 10px; right: 10px;
+            background: var(--text); color: white;
+            border: none; padding: 5px 10px; font-size: 10px;
+            cursor: pointer; display: none; z-index: 10;
+            font-family: 'Space Mono';
         }
-        .admin-panel-active { display: block !important; }
-        .admin-input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid var(--line); font-family: 'Space Mono'; }
-        .admin-btn { padding: 10px 20px; background: var(--text); color: var(--bg); border: none; cursor: pointer; font-family: 'Space Mono'; width: 100%; margin-top: 10px; }
-        .close-admin { position: absolute; top: 10px; right: 10px; cursor: pointer; font-weight: bold; }
 
-        footer { text-align: center; padding: 100px 0; border-top: 1px solid var(--line); font-family: 'Space Mono'; opacity: 0.5; }
+        .qr-container { 
+            position: fixed; bottom: 80px; right: 20px; 
+            background: var(--paper); padding: 10px; 
+            border: 1px solid var(--text); text-align: center;
+            box-shadow: 4px 4px 0px var(--text); z-index: 99;
+        }
+
+        footer { text-align: center; padding: 80px 0; border-top: 1px solid var(--line); font-family: 'Space Mono'; opacity: 0.5; }
 
         @media (max-width: 900px) {
-            .grid-layout, .place-info-grid, .gallery { grid-template-columns: 1fr; }
-            #main-content { padding-left: 60px; }
-            .qr-container, .admin-trigger { display: none; }
-            .hero-members { left: 60px; bottom: 30px; font-size: 0.55rem; }
+            .grid-layout { grid-template-columns: 1fr; }
+            .gallery { grid-template-columns: 1fr; }
+            #main-content { padding-left: 60px; padding-right: 20px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="admin-trigger" onclick="checkAdmin()" title="Admin Login">✎</div>
-
-    <div id="admin-panel">
-        <span class="close-admin" onclick="toggleAdminPanel()">✕</span>
-        <h3 style="margin-bottom: 15px;">Chỉnh sửa ảnh địa danh</h3>
-        <p style="font-size: 0.7rem; margin-bottom: 10px; opacity: 0.7;">Dán link ảnh (URL) vào ô tương ứng:</p>
-        
-        <label style="font-size: 0.8rem;">Ảnh Tao Đàn 1:</label>
-        <input type="text" id="edit-taodan1" class="admin-input" placeholder="Dán link ảnh...">
-        
-        <label style="font-size: 0.8rem;">Ảnh Bảo Tàng 1:</label>
-        <input type="text" id="edit-baotang1" class="admin-input" placeholder="Dán link ảnh...">
-        
-        <label style="font-size: 0.8rem;">Ảnh Dinh Độc Lập 1:</label>
-        <input type="text" id="edit-dinh1" class="admin-input" placeholder="Dán link ảnh...">
-        
-        <button class="admin-btn" onclick="saveImages()">CẬP NHẬT GIAO DIỆN</button>
+    <div class="admin-trigger" onclick="adminLogin()" title="Admin Login">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
     </div>
 
     <section id="hero">
@@ -182,129 +151,153 @@
             <p><b>Minh Hiển:</b> Hình ảnh</p>
             <p><b>Khánh Vân:</b> Hình ảnh</p>
         </div>
-
-        <div class="hero-tag">EST. 1976 / TP. HỒ CHÍ MINH</div>
+        <div class="hero-tag">EST. 1976 / QUẬN 1, SAIGON</div>
         <h1 class="hero-title">district1.<br><i>vibes</i></h1>
-        <p style="margin-bottom: 2rem; font-style: italic;">Hành trình vào trái tim của "Hòn ngọc Viễn Đông"</p>
-        <button class="btn-explore" onclick="showContent()">TÌM HIỂU THÊM</button>
+        <p style="font-style: italic; margin-bottom: 2rem;">Hành trình vào trái tim của "Hòn ngọc Viễn Đông"</p>
+        <button class="btn-explore" onclick="showContent()">KHÁM PHÁ NGAY</button>
     </section>
 
     <main id="main-content">
         <div class="journal-meta">
-            <span>VOLUME 01</span>
-            <span>QUẬN 1, SAIGON, VN</span>
+            <span>VOL. 01 / 2026</span>
+            <span>SAI GON JOURNAL</span>
             <span id="current-date">MAY 2026</span>
         </div>
 
         <nav class="nav-tabs">
-            <div class="tab-item active" onclick="openTab(event, 'tongquan')">Tổng quan</div>
-            <div class="tab-item" onclick="openTab(event, 'vitri')">Vị trí & Địa lý</div>
+            <div class="tab-item active" onclick="openTab(event, 'tongquan')">Tổng quan & Vị trí</div>
             <div class="tab-item" onclick="openTab(event, 'kinhte')">Vị thế & Kinh tế</div>
             <div class="tab-item" onclick="openTab(event, 'diadanh')">Địa danh nổi bật</div>
         </nav>
 
         <div id="tongquan" class="section-content active">
             <div class="grid-layout">
-                <div class="column-text">
-                    <h2 style="margin-bottom: 20px;">Trái tim của Thành phố</h2>
-                    <p>Quận 1 là sự giao thoa độc đáo giữa di sản lịch sử lâu đời và nhịp sống đô thị hiện đại. Với bề dày phát triển qua hơn 300 năm, nơi đây không chỉ là đầu não hành chính mà còn là linh hồn của Sài Gòn.</p>
+                <div class="info-card">
+                    <h3>Vị trí & Địa lý</h3>
+                    <p style="margin-top:10px">• Nằm tại trung tâm, là đầu não kinh tế, văn hóa và hành chính của thành phố.</p>
+                    <p>• Diện tích 7,72 km², tập trung nhiều cơ quan chính phủ và văn phòng lớn.</p>
+                    <h4 style="margin-top:20px">Vị trí tiếp giáp:</h4>
+                    <p><b>- Đông:</b> Giáp TP. Thủ Đức (qua sông Sài Gòn).</p>
+                    <p><b>- Tây:</b> Giáp Quận 3 và Quận 5 (Minh Khai, Hai Bà Trưng...)</p>
+                    <p><b>- Nam:</b> Giáp Quận 4 (qua kênh Bến Nghé).</p>
                 </div>
                 <div class="info-card">
-                    <h3>Sự hình thành</h3>
-                    <p style="font-size: 0.9rem; margin-top: 10px;">Chính thức thành lập năm 1976 từ việc sáp nhập Quận 1 và Quận 2 cũ.</p>
+                    <h3>Đặc điểm địa hình</h3>
+                    <p style="margin-top:10px">• Địa hình cao ráo, bằng phẳng, nền đất cứng thuận lợi xây dựng cao ốc, ít ngập úng.</p>
+                    <p>• Hệ thống sông rạch bao quanh: Sông Sài Gòn, rạch Bến Nghé, kênh Nhiêu Lộc - Thị Nghè giúp phát triển cảng và du lịch.</p>
+                    <p>• Quy hoạch ổn định, hạ tầng kỹ thuật hiện đại bậc nhất.</p>
                 </div>
             </div>
-        </div>
-
-        <div id="vitri" class="section-content">
-            <div class="grid-layout">
-                <div class="info-card">
-                    <h3>Vị trí tiếp giáp</h3>
-                    <ul style="list-style: none; margin-top: 15px; font-size: 0.9rem;">
-                        <li>• <b>Đông:</b> TP. Thủ Đức</li>
-                        <li>• <b>Tây:</b> Quận 3 và Quận 5</li>
-                        <li>• <b>Nam:</b> Quận 4</li>
-                    </ul>
-                </div>
-                <div class="column-text">
-                    <h3>Đặc điểm địa hình</h3>
-                    <p>Địa hình cao ráo, bằng phẳng với nền đất cứng, thuận lợi cho xây dựng cao ốc.</p>
-                </div>
+            <div class="full-width-card">
+                <h3>Dân cư & Hình thành</h3>
+                <p><b>Dân cư:</b> Quy mô hơn 200.000 người (2022). Mật độ cực cao (~29.246 người/km²), hội tụ lao động trình độ cao.</p>
+                <p><b>Sự hình thành:</b> Phát triển qua hơn 300 năm; chính thức thành lập năm 1976 từ việc sáp nhập Quận 1 và Quận 2 cũ.</p>
             </div>
         </div>
 
         <div id="kinhte" class="section-content">
-            <div class="info-card" style="box-shadow: 10px 10px 0px var(--text);">
-                <h2>Vai trò kinh tế chiến lược</h2>
-                <p style="margin-top: 15px;">Đóng góp GRDP khổng lồ, là trung tâm tài chính lớn nhất Việt Nam.</p>
+            <div class="full-width-card" style="box-shadow: 10px 10px 0px var(--text);">
+                <h2>Vị thế chiến lược</h2>
+                <p style="margin-top:15px"><b>Kinh tế - Tài chính:</b> Đóng góp GRDP khổng lồ (~14,5 tỷ USD). Nơi đặt trụ sở các ngân hàng, cao ốc văn phòng và bất động sản đắt đỏ.</p>
+                <p><b>Chính trị:</b> Nơi đặt hầu hết các cơ quan hành chính, sở ban ngành thành phố.</p>
+            </div>
+            <div class="grid-layout">
+                <div class="info-card">
+                    <h4>Kinh tế đêm & Đối ngoại</h4>
+                    <p>Phát triển mạnh dịch vụ xuyên đêm, phố đi bộ. Là nơi đặt các lãnh sự quán và tập đoàn quốc tế.</p>
+                </div>
+                <div class="info-card">
+                    <h4>Văn hoá & Ẩm thực</h4>
+                    <p>Sự giao thoa độc đáo giữa di sản và hiện đại. Ẩm thực hòa quyện tinh tế giữa 3 miền và quốc tế, từ chợ Bến Thành đến nhà hàng cao cấp.</p>
+                </div>
             </div>
         </div>
 
         <div id="diadanh" class="section-content">
+            
             <div class="place-item">
                 <h2 class="place-header">01. Công Viên Tao Đàn</h2>
                 <div class="gallery">
-                    <img id="img-taodan1" src="https://images.unsplash.com/photo-1596422045429-90e7e0047593?q=80&w=1000" alt="Tao Dan">
-                    <img src="https://images.unsplash.com/photo-1582650809083-094191024357?q=80&w=500" alt="Tao Dan 2">
+                    <div class="gallery-container">
+                        <button class="admin-btn" onclick="changeImg('img-td-1')">Đổi ảnh</button>
+                        <img id="img-td-1" src="https://images.unsplash.com/photo-1596422045429-90e7e0047593?q=80&w=1000" alt="Tao Đàn">
+                    </div>
+                    <div class="gallery-container">
+                        <button class="admin-btn" onclick="changeImg('img-td-2')">Đổi ảnh</button>
+                        <img id="img-td-2" src="https://images.unsplash.com/photo-1582650809083-094191024357?q=80&w=500" alt="Tao Đàn">
+                    </div>
+                </div>
+                <div class="grid-layout column-text">
+                    <div>
+                        <p><b>Vị trí & Sự hình thành:</b> Diện tích 10 hecta, bao quanh bởi Nguyễn Thị Minh Khai, Trương Định, Nguyễn Du và CMT8. Xưa là vườn của Dinh Toàn quyền Pháp, mang tên Tao Đàn sau 1955.</p>
+                        <p style="margin-top:10px"><b>Lý do thu hút:</b> Hơn 1.000 cây cổ thụ, văn hóa thưởng trà và nghe chim hót vào sáng sớm.</p>
+                    </div>
+                    <div>
+                        <p><b>Vai trò:</b> "Lá phổi xanh" điều hòa không khí, nơi tổ chức Hội Hoa Xuân quy mô nhất thành phố mỗi dịp Tết.</p>
+                    </div>
                 </div>
             </div>
 
             <div class="place-item">
                 <h2 class="place-header">02. Bảo tàng TP. Hồ Chí Minh</h2>
                 <div class="gallery">
-                    <img id="img-baotang1" src="https://images.unsplash.com/photo-1544033527-b192daee1f5b?q=80&w=1000" alt="Museum">
-                    <img src="https://images.unsplash.com/photo-1559592490-683c0027324d?q=80&w=500" alt="Museum 2">
+                    <div class="gallery-container">
+                        <button class="admin-btn" onclick="changeImg('img-bt-1')">Đổi ảnh</button>
+                        <img id="img-bt-1" src="https://images.unsplash.com/photo-1544033527-b192daee1f5b?q=80&w=1000" alt="Bảo tàng">
+                    </div>
+                    <div class="gallery-container">
+                        <button class="admin-btn" onclick="changeImg('img-bt-2')">Đổi ảnh</button>
+                        <img id="img-bt-2" src="https://images.unsplash.com/photo-1559592490-683c0027324d?q=80&w=500" alt="Bảo tàng">
+                    </div>
+                </div>
+                <div class="grid-layout column-text">
+                    <div>
+                        <p><b>Vị trí & Sự hình thành:</b> Số 65 Lý Tự Trọng. Xây dựng năm 1885 bởi KTS Alfred Foulhoux. Từng là Dinh Gia Long trước khi thành bảo tàng năm 1978.</p>
+                        <p style="margin-top:10px"><b>Lý do thu hút:</b> Kiến trúc Gothique kết hợp Á Đông, cầu thang gỗ cổ kính là điểm "check-in" điện ảnh.</p>
+                    </div>
+                    <div>
+                        <p><b>Vai trò:</b> "Cuốn từ điển sống" bảo tồn di sản quý giá về lịch sử khai hoang và phát triển của Sài Gòn.</p>
+                    </div>
                 </div>
             </div>
 
             <div class="place-item">
                 <h2 class="place-header">03. Dinh Độc Lập</h2>
                 <div class="gallery">
-                    <img id="img-dinh1" src="https://images.unsplash.com/photo-1623334233519-563e46c76949?q=80&w=1000" alt="Independence Palace">
-                    <img src="https://images.unsplash.com/photo-1599427303058-f04cbcf4756f?q=80&w=500" alt="Inside Palace">
+                    <div class="gallery-container">
+                        <button class="admin-btn" onclick="changeImg('img-dinh-1')">Đổi ảnh</button>
+                        <img id="img-dinh-1" src="https://images.unsplash.com/photo-1623334233519-563e46c76949?q=80&w=1000" alt="Dinh Độc Lập">
+                    </div>
+                    <div class="gallery-container">
+                        <button class="admin-btn" onclick="changeImg('img-dinh-2')">Đổi ảnh</button>
+                        <img id="img-dinh-2" src="https://images.unsplash.com/photo-1599427303058-f04cbcf4756f?q=80&w=500" alt="Dinh Độc Lập">
+                    </div>
+                </div>
+                <div class="grid-layout column-text">
+                    <div>
+                        <p><b>Vị trí & Sự hình thành:</b> Số 135 Nam Kỳ Khởi Nghĩa. KTS Ngô Viết Thụ thiết kế, khánh thành năm 1966. Chứng nhân lịch sử ngày 30/4/1975.</p>
+                        <p style="margin-top:10px"><b>Lý do thu hút:</b> Kiến trúc lồng ghép chữ Hán (Cát, Khẩu, Vương), hệ thống hầm ngầm quân sự bí ẩn.</p>
+                    </div>
+                    <div>
+                        <p><b>Vai trò:</b> Di tích quốc gia đặc biệt, nơi tổ chức các nghi lễ đối ngoại trọng đại của Nhà nước.</p>
+                    </div>
                 </div>
             </div>
+
         </div>
 
         <footer>
             <p>DISTRICT1.VIBES / 2026 JOURNAL</p>
+            <p style="font-size: 0.6rem; margin-top: 10px;">MADE WITH HEART FOR SAIGON LOVERS</p>
         </footer>
     </main>
 
     <div class="qr-container">
         <div id="qrcode"></div>
-        <p class="qr-text">QUÉT ĐỂ TRUY CẬP TRANG WEB</p>
+        <p style="font-family:'Space Mono'; font-size: 8px; margin-top:5px">SCAN TO VISIT</p>
     </div>
 
     <script>
-        // ADMIN LOGIC
-        function checkAdmin() {
-            let pass = prompt("Nhập mật khẩu Admin để chỉnh sửa:");
-            if (pass === "18062010") {
-                toggleAdminPanel();
-            } else if (pass !== null) {
-                alert("Mật khẩu không chính xác!");
-            }
-        }
-
-        function toggleAdminPanel() {
-            document.getElementById('admin-panel').classList.toggle('admin-panel-active');
-        }
-
-        function saveImages() {
-            const td1 = document.getElementById('edit-taodan1').value;
-            const bt1 = document.getElementById('edit-baotang1').value;
-            const d1 = document.getElementById('edit-dinh1').value;
-
-            if(td1) document.getElementById('img-taodan1').src = td1;
-            if(bt1) document.getElementById('img-baotang1').src = bt1;
-            if(d1) document.getElementById('img-dinh1').src = d1;
-
-            alert("Đã cập nhật ảnh thành công!");
-            toggleAdminPanel();
-        }
-
-        // NAVIGATION LOGIC
         function showContent() {
             document.getElementById('hero').style.display = 'none';
             document.getElementById('main-content').style.display = 'block';
@@ -312,30 +305,38 @@
         }
 
         function openTab(evt, tabName) {
-            var i, section, tabs;
-            section = document.getElementsByClassName("section-content");
-            for (i = 0; i < section.length; i++) {
-                section[i].classList.remove("active");
-            }
-            tabs = document.getElementsByClassName("tab-item");
-            for (i = 0; i < tabs.length; i++) {
-                tabs[i].classList.remove("active");
-            }
+            var section = document.getElementsByClassName("section-content");
+            for (var i = 0; i < section.length; i++) section[i].classList.remove("active");
+            var tabs = document.getElementsByClassName("tab-item");
+            for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove("active");
             document.getElementById(tabName).classList.add("active");
             evt.currentTarget.classList.add("active");
         }
 
+        // --- HỆ THỐNG ADMIN ---
+        function adminLogin() {
+            let pass = prompt("Nhập mật khẩu Admin để chỉnh sửa:");
+            if(pass === "18062010") {
+                alert("Đăng nhập thành công! Bạn có thể đổi ảnh ngay bây giờ.");
+                let btns = document.querySelectorAll('.admin-btn');
+                btns.forEach(btn => btn.style.display = 'block');
+            } else {
+                alert("Sai mật khẩu!");
+            }
+        }
+
+        function changeImg(imgId) {
+            let newUrl = prompt("Dán link ảnh mới vào đây:");
+            if(newUrl) {
+                document.getElementById(imgId).src = newUrl;
+            }
+        }
+
         window.onload = function() {
-            var currentUrl = window.location.href;
             new QRCode(document.getElementById("qrcode"), {
-                text: currentUrl,
-                width: 80,
-                height: 80,
-                colorDark : "#2d2a26",
-                colorLight : "#ffffff",
-                correctLevel : QRCode.CorrectLevel.H
+                text: window.location.href,
+                width: 60, height: 60
             });
-            
             const d = new Date();
             const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
             document.getElementById('current-date').innerText = months[d.getMonth()] + " " + d.getFullYear();
