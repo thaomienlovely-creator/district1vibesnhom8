@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>district1.vibes | Trái tim Sài Gòn</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@300;400;600&family=Space+Mono&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <style>
+        :root {
+            --bg: #f9f7f2;
+            --text: #2d2a26;
+            --accent: #5e6d5a; /* Xanh rêu dịu */
+            --line: rgba(45, 42, 38, 0.15);
+            --paper: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg); 
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 50px; bottom: 0;
+            width: 1px; background: var(--line);
+            z-index: -1;
+        }
+
+        h1, h2, h3 { font-family: 'Playfair Display', serif; font-weight: 700; }
+
+        /* --- MÀN HÌNH CHÀO (HERO) --- */
+        #hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            border-bottom: 1px solid var(--text);
+            position: relative;
+        }
+
+        .hero-members {
+            position: absolute;
+            left: 70px;
+            bottom: 60px;
+            text-align: left;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.65rem;
+            line-height: 1.8;
+            letter-spacing: 1px;
+            border-left: 1px solid var(--text);
+            padding-left: 15px;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+        .hero-members b { font-weight: 600; color: var(--accent); }
+
+        .hero-tag { font-family: 'Space Mono', monospace; font-size: 0.8rem; letter-spacing: 3px; margin-bottom: 1rem; }
+        .hero-title { font-size: clamp(3rem, 10vw, 6rem); margin-bottom: 2rem; line-height: 1; }
+        
+        .btn-explore {
+            padding: 15px 40px;
+            border: 1px solid var(--text);
+            background: transparent;
+            font-family: 'Space Mono', monospace;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            z-index: 2;
+        }
+        .btn-explore:hover { background: var(--text); color: var(--bg); }
+
+        /* --- MAIN CONTENT --- */
+        #main-content { display: none; padding: 60px 10% 60px 100px; max-width: 1300px; margin: 0 auto; }
+
+        .journal-meta { display: flex; justify-content: space-between; border-bottom: 1px solid var(--text); padding-bottom: 10px; margin-bottom: 40px; font-family: 'Space Mono', monospace; font-size: 0.7rem; }
+
+        .nav-tabs { display: flex; gap: 30px; margin-bottom: 50px; border-bottom: 1px solid var(--line); padding-bottom: 15px; overflow-x: auto; }
+        .tab-item { cursor: pointer; opacity: 0.5; font-weight: 600; text-transform: uppercase; font-size: 0.8rem; white-space: nowrap; transition: 0.3s; }
+        .tab-item.active { opacity: 1; border-bottom: 2px solid var(--text); }
+
+        .section-content { display: none; animation: fadeIn 0.8s ease forwards; }
+        .section-content.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+        .column-text { text-align: justify; column-count: 1; }
+        .info-card { background: var(--paper); padding: 30px; border: 1px solid var(--line); box-shadow: 10px 10px 0px var(--accent); margin-bottom: 30px; }
+
+        /* --- ĐỊA DANH --- */
+        .place-item { margin-bottom: 100px; }
+        .place-header { font-size: 2.5rem; margin-bottom: 20px; border-left: 5px solid var(--accent); padding-left: 20px; }
+        
+        .gallery { display: grid; grid-template-columns: 2fr 1fr; gap: 15px; margin: 30px 0; }
+        .gallery img { width: 100%; height: 300px; object-fit: cover; filter: sepia(20%); transition: 0.5s; cursor: crosshair; border: 1px solid var(--line); }
+        .gallery img:hover { filter: sepia(0%); }
+
+        .place-info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; }
+
+        /* --- QR CODE BOX --- */
+        .qr-container { 
+            position: fixed; bottom: 30px; right: 30px; 
+            background: var(--paper); padding: 15px; 
+            border: 1px solid var(--text); text-align: center;
+            box-shadow: 5px 5px 0px var(--text);
+            z-index: 100;
+        }
+        #qrcode img { margin: 0 auto; }
+        .qr-text { font-family: 'Space Mono', monospace; font-size: 0.6rem; margin-top: 5px; }
+
+        /* --- ADMIN EDIT SYSTEM --- */
+        .admin-trigger {
+            position: fixed; bottom: 150px; right: 35px;
+            width: 40px; height: 40px; background: var(--paper);
+            border: 1px solid var(--text); border-radius: 50%;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            box-shadow: 3px 3px 0px var(--text); z-index: 101; transition: 0.3s;
+        }
+        .admin-trigger:hover { transform: scale(1.1); background: var(--accent); color: white; }
+
+        #admin-panel {
+            display: none; position: fixed; top: 50%; left: 50%; 
+            transform: translate(-50%, -50%); background: var(--paper);
+            padding: 30px; border: 2px solid var(--text); z-index: 200;
+            box-shadow: 20px 20px 0px rgba(0,0,0,0.2); width: 90%; max-width: 500px;
+        }
+        .admin-panel-active { display: block !important; }
+        .admin-input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid var(--line); font-family: 'Space Mono'; }
+        .admin-btn { padding: 10px 20px; background: var(--text); color: var(--bg); border: none; cursor: pointer; font-family: 'Space Mono'; width: 100%; margin-top: 10px; }
+        .close-admin { position: absolute; top: 10px; right: 10px; cursor: pointer; font-weight: bold; }
+
+        footer { text-align: center; padding: 100px 0; border-top: 1px solid var(--line); font-family: 'Space Mono'; opacity: 0.5; }
+
+        @media (max-width: 900px) {
+            .grid-layout, .place-info-grid, .gallery { grid-template-columns: 1fr; }
+            #main-content { padding-left: 60px; }
+            .qr-container, .admin-trigger { display: none; }
+            .hero-members { left: 60px; bottom: 30px; font-size: 0.55rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="admin-trigger" onclick="checkAdmin()" title="Admin Login">✎</div>
+
+    <div id="admin-panel">
+        <span class="close-admin" onclick="toggleAdminPanel()">✕</span>
+        <h3 style="margin-bottom: 15px;">Chỉnh sửa ảnh địa danh</h3>
+        <p style="font-size: 0.7rem; margin-bottom: 10px; opacity: 0.7;">Dán link ảnh (URL) vào ô tương ứng:</p>
+        
+        <label style="font-size: 0.8rem;">Ảnh Tao Đàn 1:</label>
+        <input type="text" id="edit-taodan1" class="admin-input" placeholder="Dán link ảnh...">
+        
+        <label style="font-size: 0.8rem;">Ảnh Bảo Tàng 1:</label>
+        <input type="text" id="edit-baotang1" class="admin-input" placeholder="Dán link ảnh...">
+        
+        <label style="font-size: 0.8rem;">Ảnh Dinh Độc Lập 1:</label>
+        <input type="text" id="edit-dinh1" class="admin-input" placeholder="Dán link ảnh...">
+        
+        <button class="admin-btn" onclick="saveImages()">CẬP NHẬT GIAO DIỆN</button>
+    </div>
+
+    <section id="hero">
+        <div class="hero-members">
+            <p><b>Thảo Miên:</b> Nội dung, thiết kế</p>
+            <p><b>Xuân An:</b> Nội dung</p>
+            <p><b>Thiên Nhi:</b> Thuyết trình</p>
+            <p><b>Quốc Minh:</b> Thuyết trình</p>
+            <p><b>Minh Hiển:</b> Hình ảnh</p>
+            <p><b>Khánh Vân:</b> Hình ảnh</p>
+        </div>
+
+        <div class="hero-tag">EST. 1976 / TP. HỒ CHÍ MINH</div>
+        <h1 class="hero-title">district1.<br><i>vibes</i></h1>
+        <p style="margin-bottom: 2rem; font-style: italic;">Hành trình vào trái tim của "Hòn ngọc Viễn Đông"</p>
+        <button class="btn-explore" onclick="showContent()">TÌM HIỂU THÊM</button>
+    </section>
+
+    <main id="main-content">
+        <div class="journal-meta">
+            <span>VOLUME 01</span>
+            <span>QUẬN 1, SAIGON, VN</span>
+            <span id="current-date">MAY 2026</span>
+        </div>
+
+        <nav class="nav-tabs">
+            <div class="tab-item active" onclick="openTab(event, 'tongquan')">Tổng quan</div>
+            <div class="tab-item" onclick="openTab(event, 'vitri')">Vị trí & Địa lý</div>
+            <div class="tab-item" onclick="openTab(event, 'kinhte')">Vị thế & Kinh tế</div>
+            <div class="tab-item" onclick="openTab(event, 'diadanh')">Địa danh nổi bật</div>
+        </nav>
+
+        <div id="tongquan" class="section-content active">
+            <div class="grid-layout">
+                <div class="column-text">
+                    <h2 style="margin-bottom: 20px;">Trái tim của Thành phố</h2>
+                    <p>Quận 1 là sự giao thoa độc đáo giữa di sản lịch sử lâu đời và nhịp sống đô thị hiện đại. Với bề dày phát triển qua hơn 300 năm, nơi đây không chỉ là đầu não hành chính mà còn là linh hồn của Sài Gòn.</p>
+                </div>
+                <div class="info-card">
+                    <h3>Sự hình thành</h3>
+                    <p style="font-size: 0.9rem; margin-top: 10px;">Chính thức thành lập năm 1976 từ việc sáp nhập Quận 1 và Quận 2 cũ.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="vitri" class="section-content">
+            <div class="grid-layout">
+                <div class="info-card">
+                    <h3>Vị trí tiếp giáp</h3>
+                    <ul style="list-style: none; margin-top: 15px; font-size: 0.9rem;">
+                        <li>• <b>Đông:</b> TP. Thủ Đức</li>
+                        <li>• <b>Tây:</b> Quận 3 và Quận 5</li>
+                        <li>• <b>Nam:</b> Quận 4</li>
+                    </ul>
+                </div>
+                <div class="column-text">
+                    <h3>Đặc điểm địa hình</h3>
+                    <p>Địa hình cao ráo, bằng phẳng với nền đất cứng, thuận lợi cho xây dựng cao ốc.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="kinhte" class="section-content">
+            <div class="info-card" style="box-shadow: 10px 10px 0px var(--text);">
+                <h2>Vai trò kinh tế chiến lược</h2>
+                <p style="margin-top: 15px;">Đóng góp GRDP khổng lồ, là trung tâm tài chính lớn nhất Việt Nam.</p>
+            </div>
+        </div>
+
+        <div id="diadanh" class="section-content">
+            <div class="place-item">
+                <h2 class="place-header">01. Công Viên Tao Đàn</h2>
+                <div class="gallery">
+                    <img id="img-taodan1" src="https://images.unsplash.com/photo-1596422045429-90e7e0047593?q=80&w=1000" alt="Tao Dan">
+                    <img src="https://images.unsplash.com/photo-1582650809083-094191024357?q=80&w=500" alt="Tao Dan 2">
+                </div>
+            </div>
+
+            <div class="place-item">
+                <h2 class="place-header">02. Bảo tàng TP. Hồ Chí Minh</h2>
+                <div class="gallery">
+                    <img id="img-baotang1" src="https://images.unsplash.com/photo-1544033527-b192daee1f5b?q=80&w=1000" alt="Museum">
+                    <img src="https://images.unsplash.com/photo-1559592490-683c0027324d?q=80&w=500" alt="Museum 2">
+                </div>
+            </div>
+
+            <div class="place-item">
+                <h2 class="place-header">03. Dinh Độc Lập</h2>
+                <div class="gallery">
+                    <img id="img-dinh1" src="https://images.unsplash.com/photo-1623334233519-563e46c76949?q=80&w=1000" alt="Independence Palace">
+                    <img src="https://images.unsplash.com/photo-1599427303058-f04cbcf4756f?q=80&w=500" alt="Inside Palace">
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>DISTRICT1.VIBES / 2026 JOURNAL</p>
+        </footer>
+    </main>
+
+    <div class="qr-container">
+        <div id="qrcode"></div>
+        <p class="qr-text">QUÉT ĐỂ TRUY CẬP TRANG WEB</p>
+    </div>
+
+    <script>
+        // ADMIN LOGIC
+        function checkAdmin() {
+            let pass = prompt("Nhập mật khẩu Admin để chỉnh sửa:");
+            if (pass === "18062010") {
+                toggleAdminPanel();
+            } else if (pass !== null) {
+                alert("Mật khẩu không chính xác!");
+            }
+        }
+
+        function toggleAdminPanel() {
+            document.getElementById('admin-panel').classList.toggle('admin-panel-active');
+        }
+
+        function saveImages() {
+            const td1 = document.getElementById('edit-taodan1').value;
+            const bt1 = document.getElementById('edit-baotang1').value;
+            const d1 = document.getElementById('edit-dinh1').value;
+
+            if(td1) document.getElementById('img-taodan1').src = td1;
+            if(bt1) document.getElementById('img-baotang1').src = bt1;
+            if(d1) document.getElementById('img-dinh1').src = d1;
+
+            alert("Đã cập nhật ảnh thành công!");
+            toggleAdminPanel();
+        }
+
+        // NAVIGATION LOGIC
+        function showContent() {
+            document.getElementById('hero').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
+            window.scrollTo(0,0);
+        }
+
+        function openTab(evt, tabName) {
+            var i, section, tabs;
+            section = document.getElementsByClassName("section-content");
+            for (i = 0; i < section.length; i++) {
+                section[i].classList.remove("active");
+            }
+            tabs = document.getElementsByClassName("tab-item");
+            for (i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+            }
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        window.onload = function() {
+            var currentUrl = window.location.href;
+            new QRCode(document.getElementById("qrcode"), {
+                text: currentUrl,
+                width: 80,
+                height: 80,
+                colorDark : "#2d2a26",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+            
+            const d = new Date();
+            const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+            document.getElementById('current-date').innerText = months[d.getMonth()] + " " + d.getFullYear();
+        }
+    </script>
+</body>
+</html>
